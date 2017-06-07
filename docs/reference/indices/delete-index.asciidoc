@@ -10,8 +10,9 @@ DELETE /twitter
 // CONSOLE
 // TEST[setup:twitter]
 
-The above example deletes an index called `twitter`. Specifying an index,
-alias or wildcard expression is required.
+The above example deletes an index called `twitter`. Specifying an index
+or a wildcard expression is required (any wildcard expression will expand
+to matching indices).
 
 The delete index API can also be applied to more than one index, by either using a comma separated list, or on all indices (be careful!) by using `_all` or `*` as index.
 

@@ -486,8 +486,8 @@ public class IndicesRequestIT extends ESIntegTestCase {
     public void testDeleteIndex() {
         interceptTransportActions(DeleteIndexAction.NAME);
 
-        String[] randomIndicesOrAliases = randomUniqueIndicesOrAliases();
-        DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(randomIndicesOrAliases);
+        String[] randomIndices = randomUniqueIndices();
+        DeleteIndexRequest deleteIndexRequest = new DeleteIndexRequest(randomIndices);
         assertAcked(internalCluster().coordOnlyNodeClient().admin().indices().delete(deleteIndexRequest).actionGet());
 
         clearInterceptedActions();
@@ -643,13 +643,18 @@ public class IndicesRequestIT extends ESIntegTestCase {
         return indices;
     }
 
-    private String[] randomUniqueIndicesOrAliases() {
+    private String[] randomUniqueIndices() {
         Set<String> uniqueIndices = new HashSet<>();
         int count = randomIntBetween(1, this.indices.size());
         while (uniqueIndices.size() < count) {
             uniqueIndices.add(randomFrom(this.indices));
         }
-        String[] indices = new String[count];
+        return uniqueIndices.toArray(new String[uniqueIndices.size()]);
+    }
+
+    private String[] randomUniqueIndicesOrAliases() {
+        String[] uniqueIndices = randomUniqueIndices();
+        String[] indices = new String[uniqueIndices.length];
         int i = 0;
         for (String index : uniqueIndices) {
             indices[i++] = randomBoolean() ? index + "-alias" : index;
